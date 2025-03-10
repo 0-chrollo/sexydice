@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <title>3D Dice Game</title>
+    <style>
+        section {
+            height: 100%;
+            z-index: 1;
+            display: flex;
+            flex-direction: column; /* Align children vertically */
+            align-items: center;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10vh; /* Adjusted margin for spacing from top */
+            margin-bottom: 1vh; /* Adjusted margin for spacing from bottom */
+            position: relative;
+            
+        }
+
+        .dice {
+            width: 20vw; /* Adjusted width based on viewport width */
+            height: 20vw; /* Adjusted height based on viewport width */
+            position: static;
+            transform-style: preserve-3d;
+            margin-right: 5vw; /* Adjusted spacing between dice based on viewport width */
+        }
+
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            border: 1px solid #888;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .face h1 {
+            font-size: 3vw; /* Adjusted font size based on viewport width */
+            margin: 0;
+        }
+
+        .face img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .front {
+            transform: translateZ(13vw); /* Adjusted translateZ based on viewport width */
+        }
+
+        .back {
+            transform: rotateY(180deg) translateZ(13vw); /* Adjusted translateZ based on viewport width */
+        }
+
+        .right {
+            transform: rotateY(90deg) translateZ(13vw); /* Adjusted translateZ based on viewport width */
+        }
+
+        .left {
+            transform: rotateY(-90deg) translateZ(13vw); /* Adjusted translateZ based on viewport width */
+        }
+
+        .top {
+            transform: rotateX(90deg) translateZ(13vw); /* Adjusted translateZ based on viewport width */
+        }
+
+        .bottom {
+            transform: rotateX(-90deg) translateZ(13vw); /* Adjusted translateZ based on viewport width */
+        }
+
+        #rollButton {
+            text-decoration: none;
+            font-size: 2vw; /* Adjusted font size based on viewport width */
+            padding: 1vh 2vw; /* Adjusted padding based on viewport width and height */
+           border-color:  #db0b57;
+            border-radius: 1vw; /* Adjusted border radius based on viewport width */
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: auto; /* Push button to the bottom */
+            margin-bottom: 2vh; /* Adjusted margin for spacing from bottom */
+        }
+
+        #rollButton:hover {
+            background-color: #db0b57;
+            border-color:  #007bff;
+           color :rgb(40, 135, 219);
+            font-weight: bold;
+        }
+        .fas{
+           font-size:19px;
+           color:  #d0d0d0;
+
+        }
+       .fas:hover{
+
+    color:rgb(40, 135, 219);
+}
+        /* Media query for small devices */
+        @media only screen and (max-width: 768px) {
+            .container {
+              
+                margin-top: 35vh;
+                position: relative;
+            }
+
+            .dice {
+                width: 26vw;
+                height: 26vw;
+                margin: 20px;
+                margin-bottom: 5vh;
+            }
+
+            #rollButton {
+            text-decoration: none;
+            font-size: 2vw; /* Adjusted font size based on viewport width */
+            padding: 1vh 2vw; /* Adjusted padding based on viewport width and height */
+           border-color:  #db0b57;
+            border-radius: 1vw; /* Adjusted border radius based on viewport width */
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20vh; /* Push button to the bottom */
+            margin-bottom: vh; /* Adjusted margin for spacing from bottom */
+        }
+
+            #rollButton:hover {
+            
+           color :rgb(40, 135, 219);
+            font-weight: bold;
+            cursor: pointer;
+        }
+       
+        }
+    
+        
+    </style>
+</head>
+<style>
+    /* Reset CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+    }
+  
+    /* Navigation Bar Styles */
+    .navbar {
+      background-color: #ececec; /* Pink color */
+      padding: 10px 20px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      display: flex;
+      justify-content: flex-end;
+      transition: background-color 0.3s ease;
+    }
+  
+    .navbar-brand {
+        font-family: 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+      font-size: 15px;
+      color: #990059;
+      text-transform: uppercase;
+      font-weight: bold;
+      margin-right: auto; /* Push brand to the left */
+      transition: color 0.3s ease;
+    }
+  
+    .navbar-brand:hover {
+      color: #eee;
+    }
+  
+    .navbar-menu {
+      display: flex;
+      align-items: center;
+     
+    }
+  
+    .navbar-item {
+      margin-left: 20px;
+      color: #fff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+  
+    .navbar-item:last-child {
+      margin-right: 0;
+    }
+  
+    .navbar-item:hover {
+      color: #eee; /* Hover color */
+    }
+  
+    .navbar-toggler {
+      cursor: pointer;
+      display: none;
+      transition: color 0.3s ease;
+      z-index: 1000;
+    }
+  
+    .navbar-toggler:hover {
+      color: #eee; /* Hover color */
+      
+    }
+  
+    /* Media Query for Responsive Design */
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+  
+      .navbar-toggler {
+        display: block;
+        
+      }
+  
+      .navbar-toggler .fa-bars {
+        font-size: 24px;
+        color: #fff;
+        z-index: 1000;
+      }
+  
+      .navbar-toggle-menu {
+        position: fixed;
+        top: 40px;
+        right: 0;
+        background-color: #a3002e; /* Pink color */
+        height: 100vh;
+        width: 100%;
+        background-color: #007bff32 40%;
+        max-width: 300px;
+        padding: 50px;
+        transform: translateX(100%);
+        transition: transform 0.4s ease;
+        
+        z-index: 1000;
+      }
+  
+      .navbar-toggle-menu.active {
+        transform: translateX(0);
+      }
+  
+      .navbar-toggle-item {
+        margin-bottom: 20px;
+      }
+  
+      .navbar-toggle-item a {
+        color: #fff;
+        font-size: 18px;
+        text-decoration: none;
+        display: block;
+        transition: color 0.3s ease;
+      }
+  
+      .navbar-toggle-item a:hover {
+        color: #eee; /* Hover color */
+      }
+    }
+
+    
+  /* Bottom Navigation Footer Styles */
+  .footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #e1e1e1;
+    
+    padding: 20px 60px;
+    text-align: center;
+    z-index: 1000;
+  }
+
+  .footer-item {
+    display: inline-block;
+    margin: 0 10px;
+    text-decoration: none;
+    color: #620505;
+    transition: color 0.3s ease;
+  }
+
+  .footer-item:hover {
+    color: #ccc;
+  }
+  </style>
+<body>
+
+    <nav class="navbar">
+      <div class="navbar-brand">mycrazygame</div>
+      <div class="navbar-menu">
+        <a href="#" class="navbar-item">Prime Sides</a>
+        <a href="#" class="navbar-item">Even Sides</a>
+        <a href="#" class="navbar-item">Odd Sides</a>
+        <a href="#" class="navbar-item">One Dice</a>
+        <a href="#" class="navbar-item">Two Dices</a>
+      </div>
+  
+    <!---->  <div class="navbar-toggler" onclick="toggleMenu()">
+        <i style="color:#a3002e;" class="fas fa-bars">///</i>
+      </div>
+    </nav>
+    <div class="navbar-toggler" onclick="toggleMenu()">
+      <i style="color:#a3002e;" class="fas fa-bars">///</i>
+    </div>
+  </nav>
+    <div class="navbar-toggle-menu" >
+      <div class="navbar-toggle-item" style="padding-left: 24px;">
+        <a href="#">Prime Sides</a>
+      </div>
+      <div class="navbar-toggle-item" style="padding-left: 15px;">
+        <a href="#">Even Sides</a>
+      </div>
+      <div class="navbar-toggle-item" style="padding-left: 28px;">
+        <a href="#">Odd Sides</a>
+      </div>
+      <div class="navbar-toggle-item"  style="padding-left: 15px;" >
+        <a href="#">Two Dices</a>
+      </div>
+      <div class="navbar-toggle-item"  style="padding-left: 28px;">
+        <a href="#">One Dice</a>
+      </div>
+      
+    </div>
+    
+    <section>
+    <div class="container">
+        <div class="dice" id="dice1">
+          <div class="face front"><img src="position5.png" alt="Position 1"></div>
+          <div class="face back"><img src="position4.png" alt="Position 1"></div>
+          <div class="face right"><img src="position2.png" alt="Position 1"></div>
+          <div class="face left"><img src="position6.png" alt="Position 1"></div>
+          <div class="face top"><img src="position5.png" alt="Position 1"></div>
+          <div class="face bottom"><img src="position1.png" alt="Position 1"></div>
+        </div>
+        <div class="dice" id="dice2">
+          <div class="face front"><img src="position6.png" alt="Position 1"></div>
+          <div class="face back"><img src="position3.png" alt="Position 1"></div>
+          <div class="face right"><img src="position5.png" alt="Position 1"></div>
+          <div class="face left"><img src="position4.png" alt="Position 1"></div>
+          <div class="face top"><img src="position2.png" alt="Position 1"></div>
+          <div class="face bottom"><img src="position1.png" alt="Position 1"></div>
+        </div>
+    </div>
+    <button id="rollButton"><i class="fas fa-dice"></i><span style="font-size: 12px;"> Roll Dice</span> </button>
+
+  <!--
+    <script>
+        function toggleMenu() {
+          document.querySelector('.navbar-toggle-menu').classList.toggle('active');
+        }
+      </script>
+-->
+    
+    <script>
+        document.getElementById('rollButton').addEventListener('click', rollDice);
+
+        function rollDice() {
+            var dice1 = document.getElementById('dice1');
+            var dice2 = document.getElementById('dice2');
+            dice1.style.transition = 'transform 3s ease-in-out';
+            dice2.style.transition = 'transform 3s ease-in-out';
+            setTimeout(function() {
+                dice1.style.transform = 'rotateX(' + (360 * Math.random() + 760) + 'deg) rotateY(' + (360 * Math.random() + 720) + 'deg)';
+                dice2.style.transform = 'rotateX(' + (360 * Math.random() + 760) + 'deg) rotateY(' + (360 * Math.random() + 720) + 'deg)';
+                setTimeout(updateDice, 0);
+            }, 0);
+        }
+
+        function updateDice() {
+            var dice1 = document.getElementById('dice1');
+            var dice2 = document.getElementById('dice2');
+            var randomNumber1 = Math.floor(Math.random() * 6) + 1;
+            var randomNumber2 = Math.floor(Math.random() * 6) + 1;
+            var diceFaces1 = dice1.querySelectorAll('.face h1');
+            var diceFaces2 = dice2.querySelectorAll('.face h1');
+            for (var i = 0; i < diceFaces1.length; i++) {
+                diceFaces1[i].textContent = randomNumber1;
+            }
+            for (var i = 0; i < diceFaces2.length; i++) {
+                diceFaces2[i].textContent = randomNumber2;
+            }
+        }
+    </script>
+    </section>
+   
+      
+      <!-- Bottom Navigation Footer -->
+      <div class="footer">
+        <a href="#" class="footer-item"><i class="fas fa-book" style="color: #990059;"></i> DiceGame</a>
+       
+      </div>
+      
+</body>
+</html>
