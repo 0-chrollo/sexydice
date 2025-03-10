@@ -373,35 +373,66 @@
 -->
     
     <script>
-        document.getElementById('rollButton').addEventListener('click', rollDice);
+  // Initialize dice rotation values
+  var dice1 = document.getElementById('dice1');
+  var dice2 = document.getElementById('dice2');
+  dice1.setAttribute('data-rotationX', '0');
+  dice1.setAttribute('data-rotationY', '0');
+  dice2.setAttribute('data-rotationX', '0');
+  dice2.setAttribute('data-rotationY', '0');
 
-        function rollDice() {
-            var dice1 = document.getElementById('dice1');
-            var dice2 = document.getElementById('dice2');
-            dice1.style.transition = 'transform 3s ease-in-out';
-            dice2.style.transition = 'transform 3s ease-in-out';
-            setTimeout(function() {
-                dice1.style.transform = 'rotateX(' + (360 * Math.random() + 760) + 'deg) rotateY(' + (360 * Math.random() + 720) + 'deg)';
-                dice2.style.transform = 'rotateX(' + (360 * Math.random() + 760) + 'deg) rotateY(' + (360 * Math.random() + 720) + 'deg)';
-                setTimeout(updateDice, 0);
-            }, 0);
-        }
+  document.getElementById('rollButton').addEventListener('click', rollDice);
 
-        function updateDice() {
-            var dice1 = document.getElementById('dice1');
-            var dice2 = document.getElementById('dice2');
-            var randomNumber1 = Math.floor(Math.random() * 6) + 1;
-            var randomNumber2 = Math.floor(Math.random() * 6) + 1;
-            var diceFaces1 = dice1.querySelectorAll('.face h1');
-            var diceFaces2 = dice2.querySelectorAll('.face h1');
-            for (var i = 0; i < diceFaces1.length; i++) {
-                diceFaces1[i].textContent = randomNumber1;
-            }
-            for (var i = 0; i < diceFaces2.length; i++) {
-                diceFaces2[i].textContent = randomNumber2;
-            }
-        }
-    </script>
+  function rollDice() {
+      // Get dice elements
+      var dice1 = document.getElementById('dice1');
+      var dice2 = document.getElementById('dice2');
+
+      // Set the transition for a smooth roll
+      dice1.style.transition = 'transform 3s ease-in-out';
+      dice2.style.transition = 'transform 3s ease-in-out';
+
+      // Retrieve the previous rotations (defaulting to 0)
+      var prevX1 = parseInt(dice1.getAttribute('data-rotationX'));
+      var prevY1 = parseInt(dice1.getAttribute('data-rotationY'));
+      var prevX2 = parseInt(dice2.getAttribute('data-rotationX'));
+      var prevY2 = parseInt(dice2.getAttribute('data-rotationY'));
+
+      // Calculate additional rotations (ensuring several full spins)
+      // Using a random factor to add some variation
+      var addX1 = 360 * (Math.floor(Math.random() * 4) + 4); // 4 to 7 full rotations
+      var addY1 = 360 * (Math.floor(Math.random() * 4) + 4);
+      var addX2 = 360 * (Math.floor(Math.random() * 4) + 4);
+      var addY2 = 360 * (Math.floor(Math.random() * 4) + 4);
+
+      // New rotations are the previous values plus the additional spins
+      var newX1 = prevX1 + addX1;
+      var newY1 = prevY1 + addY1;
+      var newX2 = prevX2 + addX2;
+      var newY2 = prevY2 + addY2;
+
+      // Apply the new transform values
+      dice1.style.transform = 'rotateX(' + newX1 + 'deg) rotateY(' + newY1 + 'deg)';
+      dice2.style.transform = 'rotateX(' + newX2 + 'deg) rotateY(' + newY2 + 'deg)';
+
+      // Store the new rotation values for future rolls
+      dice1.setAttribute('data-rotationX', newX1);
+      dice1.setAttribute('data-rotationY', newY1);
+      dice2.setAttribute('data-rotationX', newX2);
+      dice2.setAttribute('data-rotationY', newY2);
+
+      // Optionally update the dice faces after the animation completes
+      setTimeout(updateDice, 3000);
+  }
+
+  function updateDice() {
+      // Your updateDice function can change the face content
+      // Note: In your HTML the dice faces use <img> elements.
+      // If you have a logic to change images based on the roll result,
+      // add it here.
+  }
+</script>
+
     </section>
    
       
