@@ -374,59 +374,70 @@
 
         
     
-<script>
+
   // Mapping from dice result to base rotation angles.
-  const diceMapping = {
-      1: { x: 0,   y: 0   },
-      2: { x: -90, y: 0   },
-      3: { x: 0,   y: 90  },
-      4: { x: 0,   y: -90 },
-      5: { x: 90,  y: 0   },
-      6: { x: 180, y: 0   }
-  };
+  <script>
+  // Initialize dice rotation values
+  var dice1 = document.getElementById('dice1');
+  var dice2 = document.getElementById('dice2');
+  dice1.setAttribute('data-rotationX', '0');
+  dice1.setAttribute('data-rotationY', '0');
+  dice2.setAttribute('data-rotationX', '0');
+  dice2.setAttribute('data-rotationY', '0');
 
   document.getElementById('rollButton').addEventListener('click', rollDice);
 
   function rollDice() {
-      // Get dice elements.
+      // Get dice elements
       var dice1 = document.getElementById('dice1');
       var dice2 = document.getElementById('dice2');
 
-      // Randomly choose a result (1-6) for each dice.
-      var result1 = Math.floor(Math.random() * 6) + 1;
-      var result2 = Math.floor(Math.random() * 6) + 1;
+      // Set the transition for a smooth roll
+      dice1.style.transition = 'transform 3s ease-in-out';
+      dice2.style.transition = 'transform 3s ease-in-out';
 
-      // Get the base rotations from the mapping.
-      var base1 = diceMapping[result1];
-      var base2 = diceMapping[result2];
+      // Retrieve the previous rotations (defaulting to 0)
+      var prevX1 = parseInt(dice1.getAttribute('data-rotationX'));
+      var prevY1 = parseInt(dice1.getAttribute('data-rotationY'));
+      var prevX2 = parseInt(dice2.getAttribute('data-rotationX'));
+      var prevY2 = parseInt(dice2.getAttribute('data-rotationY'));
 
-      // Add several full spins for a dynamic roll.
-      // (Randomly add between 3 and 6 full rotations.)
-      var fullSpinX1 = 360 * (Math.floor(Math.random() * 5) + 3);
-      var fullSpinY1 = 360 * (Math.floor(Math.random() * 5) + 3);
-      var fullSpinX2 = 360 * (Math.floor(Math.random() * 5) + 3);
-      var fullSpinY2 = 360 * (Math.floor(Math.random() * 5) + 3);
+      // Calculate additional rotations (ensuring several full spins)
+      // Using a random factor to add some variation
+      var addX1 = 360 * (Math.floor(Math.random() * 4) + 5); // 4 to 7 full rotations
+      var addY1 = 360 * (Math.floor(Math.random() * 6) + 4);
+      var addX2 = 360 * (Math.floor(Math.random() * 4) + 5);
+      var addY2 = 360 * (Math.floor(Math.random() * 6) + 4);
 
-      // Calculate the final rotation by adding the base angle.
-      var finalX1 = fullSpinX1 + base1.x;
-      var finalY1 = fullSpinY1 + base1.y;
-      var finalX2 = fullSpinX2 + base2.x;
-      var finalY2 = fullSpinY2 + base2.y;
+      // New rotations are the previous values plus the additional spins
+      var newX1 = prevX1 + addX1;
+      var newY1 = prevY1 + addY1;
+      var newX2 = prevX2 + addX2;
+      var newY2 = prevY2 + addY2;
 
-      // Apply a smooth transition.
-      dice1.style.transition = 'transform 4s ease-in-out';
-      dice2.style.transition = 'transform 4s ease-in-out';
+      // Apply the new transform values
+      dice1.style.transform = 'rotateX(' + newX1 + 'deg) rotateY(' + newY1 + 'deg)';
+      dice2.style.transform = 'rotateX(' + newX2 + 'deg) rotateY(' + newY2 + 'deg)';
 
-      // Set the transforms so the dice land precisely.
-      dice1.style.transform = 'rotateX(' + finalX1 + 'deg) rotateY(' + finalY1 + 'deg)';
-      dice2.style.transform = 'rotateX(' + finalX2 + 'deg) rotateY(' + finalY2 + 'deg)';
+      // Store the new rotation values for future rolls
+      dice1.setAttribute('data-rotationX', newX1);
+      dice1.setAttribute('data-rotationY', newY1);
+      dice2.setAttribute('data-rotationX', newX2);
+      dice2.setAttribute('data-rotationY', newY2);
 
-      // Optionally, update any text or image indicators after the roll.
-      // For example, you might update hidden elements that store the result.
-      // Here, we log the results to the console:
-      console.log("Dice 1: " + result1, "Dice 2: " + result2);
+      // Optionally update the dice faces after the animation completes
+      setTimeout(updateDice, 3000);
+  }
+
+  function updateDice() {
+      // Your updateDice function can change the face content
+      // Note: In your HTML the dice faces use <img> elements.
+      // If you have a logic to change images based on the roll result,
+      // add it here.
   }
 </script>
+  
+
 
 
 
