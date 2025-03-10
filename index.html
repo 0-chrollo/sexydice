@@ -371,68 +371,70 @@
         }
       </script>
 -->
+
+        <script>
     
-    <script>
-  // Initialize dice rotation values
-  var dice1 = document.getElementById('dice1');
-  var dice2 = document.getElementById('dice2');
-  dice1.setAttribute('data-rotationX', '0');
-  dice1.setAttribute('data-rotationY', '0');
-  dice2.setAttribute('data-rotationX', '0');
-  dice2.setAttribute('data-rotationY', '0');
+    // Initialize dice rotation values
+var dice1 = document.getElementById("dice1");
+var dice2 = document.getElementById("dice2");
 
-  document.getElementById('rollButton').addEventListener('click', rollDice);
+dice1.setAttribute("data-rotationX", "0");
+dice1.setAttribute("data-rotationY", "0");
+dice2.setAttribute("data-rotationX", "0");
+dice2.setAttribute("data-rotationY", "0");
 
-  function rollDice() {
-      // Get dice elements
-      var dice1 = document.getElementById('dice1');
-      var dice2 = document.getElementById('dice2');
+document.getElementById("rollButton").addEventListener("click", rollDice);
 
-      // Set the transition for a smooth roll
-      dice1.style.transition = 'transform 6s ease-in-out';
-      dice2.style.transition = 'transform 6s ease-in-out';
+function rollDice() {
+  // Set the transition for a smooth roll
+  dice1.style.transition = "transform 4s ease-in-out"; // Adjust time for speed control
+  dice2.style.transition = "transform 4s ease-in-out";
 
-      // Retrieve the previous rotations (defaulting to 0)
-      var prevX1 = parseInt(dice1.getAttribute('data-rotationX'));
-      var prevY1 = parseInt(dice1.getAttribute('data-rotationY'));
-      var prevX2 = parseInt(dice2.getAttribute('data-rotationX'));
-      var prevY2 = parseInt(dice2.getAttribute('data-rotationY'));
+  // Get the previous rotation values
+  var prevX1 = parseInt(dice1.getAttribute("data-rotationX"));
+  var prevY1 = parseInt(dice1.getAttribute("data-rotationY"));
+  var prevX2 = parseInt(dice2.getAttribute("data-rotationX"));
+  var prevY2 = parseInt(dice2.getAttribute("data-rotationY"));
 
-      // Calculate additional rotations (ensuring several full spins)
-      // Using a random factor to add some variation
-      var addX1 = 360 * (Math.floor(Math.random() * 4) + 4); // 4 to 7 full rotations
-      var addY1 = 360 * (Math.floor(Math.random() * 4) + 4);
-      var addX2 = 360 * (Math.floor(Math.random() * 4) + 4);
-      var addY2 = 360 * (Math.floor(Math.random() * 4) + 4);
+  // Generate a truly random dice face (1 to 6)  
+  var face1 = Math.floor(Math.random() * 6) + 1;
+  var face2 = Math.floor(Math.random() * 6) + 1;
 
-      // New rotations are the previous values plus the additional spins
-      var newX1 = prevX1 + addX1;
-      var newY1 = prevY1 + addY1;
-      var newX2 = prevX2 + addX2;
-      var newY2 = prevY2 + addY2;
+  // Get the precise rotation values for each dice face  
+  var rotations1 = getDiceRotation(face1);
+  var rotations2 = getDiceRotation(face2);
 
-      // Apply the new transform values
-      dice1.style.transform = 'rotateX(' + newX1 + 'deg) rotateY(' + newY1 + 'deg)';
-      dice2.style.transform = 'rotateX(' + newX2 + 'deg) rotateY(' + newY2 + 'deg)';
+  // Apply additional rotations for randomness
+  var extraRotations = 360 * (Math.floor(Math.random() * 4) + 4); // 4-7 full spins
+  var newX1 = prevX1 + extraRotations + rotations1.x;
+  var newY1 = prevY1 + extraRotations + rotations1.y;
+  var newX2 = prevX2 + extraRotations + rotations2.x;
+  var newY2 = prevY2 + extraRotations + rotations2.y;
 
-      // Store the new rotation values for future rolls
-      dice1.setAttribute('data-rotationX', newX1);
-      dice1.setAttribute('data-rotationY', newY1);
-      dice2.setAttribute('data-rotationX', newX2);
-      dice2.setAttribute('data-rotationY', newY2);
+  // Apply transformations
+  dice1.style.transform = `rotateX(${newX1}deg) rotateY(${newY1}deg)`;
+  dice2.style.transform = `rotateX(${newX2}deg) rotateY(${newY2}deg)`;
 
-      // Optionally update the dice faces after the animation completes
-      setTimeout(updateDice, 3000);
+  // Store new rotation values
+  dice1.setAttribute("data-rotationX", newX1);
+  dice1.setAttribute("data-rotationY", newY1);
+  dice2.setAttribute("data-rotationX", newX2);
+  dice2.setAttribute("data-rotationY", newY2);
+}
+
+// Function to return the correct rotation values for each dice face
+function getDiceRotation(face) {
+  switch (face) {
+    case 1: return { x: 0, y: 0 }; // Face 1 (default front)
+    case 2: return { x: 0, y: -90 }; // Face 2 (left)
+    case 3: return { x: 90, y: 0 }; // Face 3 (top)
+    case 4: return { x: -90, y: 0 }; // Face 4 (bottom)
+    case 5: return { x: 0, y: 90 }; // Face 5 (right)
+    case 6: return { x: 180, y: 0 }; // Face 6 (back)
   }
+}
 
-  function updateDice() {
-      // Your updateDice function can change the face content
-      // Note: In your HTML the dice faces use <img> elements.
-      // If you have a logic to change images based on the roll result,
-      // add it here.
-  }
-</script>
-
+        </script>
     </section>
    
       
