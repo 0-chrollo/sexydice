@@ -393,8 +393,8 @@
       var dice2 = document.getElementById('dice2');
 
       // Randomly choose a result (1-6) for each dice.
-      var result1 = Math.floor(Math.random() * 6) + 2;
-      var result2 = Math.floor(Math.random() * 6) + 3;
+      var result1 = Math.floor(Math.random() * 6) + 1;
+      var result2 = Math.floor(Math.random() * 6) + 1;
 
       // Get the base rotations from the mapping.
       var base1 = diceMapping[result1];
@@ -402,10 +402,10 @@
 
       // Add several full spins for a dynamic roll.
       // (Randomly add between 3 and 6 full rotations.)
-      var fullSpinX1 = 365 * (Math.floor(Math.random() * 4) + 3);
+      var fullSpinX1 = 360 * (Math.floor(Math.random() * 5) + 3);
       var fullSpinY1 = 360 * (Math.floor(Math.random() * 4) + 3);
-      var fullSpinX2 = 360 * (Math.floor(Math.random() * 4) + 3);
-      var fullSpinY2 = 365 * (Math.floor(Math.random() * 4) + 3);
+      var fullSpinX2 = 360 * (Math.floor(Math.random() * 5) + 3);
+      var fullSpinY2 = 360 * (Math.floor(Math.random() * 4) + 3);
 
       // Calculate the final rotation by adding the base angle.
       var finalX1 = fullSpinX1 + base1.x;
